@@ -150,7 +150,13 @@ public abstract class Document {
 	{
 	    // TODO: You will play with this method in week 1, and 
 		// then implement it in week 2
-		double fscore = 206.835 - 1.015* (this.getNumWords()/this.getNumSentences()) - 84.6* (this.getNumSyllables()/this.getNumWords());
+		double numWords = this.getNumWords();
+		double numSentences = this.getNumSentences();
+		double numSyllables = this.getNumSyllables();
+		double const1 = 206.835;
+		double const2 = 1.015;
+		double const3 = 84.6;
+		double fscore = const1 - const2* (numWords/numSentences) - const3* (numSyllables/numWords);
 	    return fscore;
 	}
 	
