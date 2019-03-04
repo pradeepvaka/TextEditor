@@ -5,6 +5,8 @@ package document;
  * @author UC San Diego Intermediate Programming MOOC team
  */
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -67,7 +69,23 @@ public abstract class Document {
 		// TODO: Implement this method so that you can call it from the 
 	    // getNumSyllables method in BasicDocument (module 2) and 
 	    // EfficientDocument (module 3).
-	    return 0;
+		word = word.toLowerCase();
+		//HashSet<Character> vowels = new HashSet<Character>(Arrays.asList('a', 'e','i','o','u','y'));
+		List<Character> vowels = Arrays.asList('a','e','i','o','u','y');
+		int syllableCount = 0;
+		for(int i=0;i<word.length();i++) {
+		
+			int contiguos_char = 0;
+			while(i<word.length() && vowels.contains(word.charAt(i))) {
+				contiguos_char++;
+				i++;	 
+			}
+		if(contiguos_char==1 && word.charAt(word.length()-1)=='e' && (i==word.length())  && syllableCount>0) syllableCount--;
+		if(contiguos_char>0) syllableCount++;
+			
+		}
+		
+		return syllableCount;
 	}
 	
 	/** A method for testing
@@ -132,7 +150,8 @@ public abstract class Document {
 	{
 	    // TODO: You will play with this method in week 1, and 
 		// then implement it in week 2
-	    return 0.0;
+		double fscore = 206.835 - 1.015* (this.getNumWords()/this.getNumSentences()) - 84.6* (this.getNumSyllables()/this.getNumWords());
+	    return fscore;
 	}
 	
 	

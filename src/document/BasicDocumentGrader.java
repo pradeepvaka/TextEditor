@@ -18,6 +18,7 @@ public class BasicDocumentGrader {
             {
                 BasicDocument doc = new BasicDocument(line);
                 String result = doc.getNumSentences() + " " + doc.getNumWords() + " " + doc.getNumSyllables() + " ";
+                //String result = " " + doc.getNumWords() ;
                 System.out.print(result);
                 out.print(result);
             }
