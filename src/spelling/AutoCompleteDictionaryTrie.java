@@ -39,8 +39,30 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	 */
 	public boolean addWord(String word)
 	{
-	    //TODO: Implement this method.
-	    return false;
+		if (word == null) {
+			throw new NullPointerException();
+		}
+		
+		TrieNode curr = root;
+		TrieNode next;
+		boolean inserted = false;
+		for (Character c1 : word.toCharArray())
+		{
+			Character c = Character.toLowerCase(c1.charValue());
+		    next = curr.getChild(c);
+			if (next == null) {
+				inserted = true;
+				next = curr.insert(c);
+			}
+			curr = next;
+		}
+		if (!curr.endsWord())
+		{
+			curr.setEndsWord(true);
+			inserted = true;
+		}
+		if (inserted) size++;
+		return inserted;
 	}
 	
 	/** 
@@ -50,7 +72,7 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public int size()
 	{
 	    //TODO: Implement this method
-	    return 0;
+	    return size;
 	}
 	
 	
@@ -59,8 +81,17 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	@Override
 	public boolean isWord(String s) 
 	{
-	    // TODO: Implement this method
-		return false;
+		TrieNode curr = root;
+		for(char cWithCase : s.toCharArray()) {
+			Character c = Character.toLowerCase(cWithCase);
+			// advance to next char
+			curr = curr.getChild(c);
+			// if next doesn't exist, return false
+			if(curr == null)
+				return false;
+		}
+		// we're at a valid node, but may not be valid
+		return curr.endsWord();
 	}
 
 	/** 
@@ -101,7 +132,37 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     	 //       Add all of its child nodes to the back of the queue
     	 // Return the list of completions
     	 
-         return null;
+    	 TrieNode curr = root;
+ 		TrieNode next = null;
+ 		List<String> toReturn = new LinkedList<String>();
+ 		Character c = null;
+ 		for (Character cWithCase : prefix.toCharArray())
+ 		{
+ 			c = Character.toLowerCase(cWithCase);
+ 			next = curr.getChild(c);
+ 			if (next == null)
+ 			{
+ 				return toReturn;
+ 			}
+ 			curr = next;
+ 		}
+ 		// Now build the list of predictions
+ 		LinkedList<TrieNode> queue = new LinkedList<TrieNode>();
+ 		queue.add(curr);
+ 		int n = 0;
+ 		while (!queue.isEmpty() && n < numCompletions)
+ 		{
+ 			next = queue.removeFirst();
+ 			if (next.endsWord()) {
+ 				toReturn.add(next.getText());
+ 				n++;
+ 			}
+ 			for (Character cnext : next.getValidNextCharacters()) 
+ 			{
+ 				queue.add(next.getChild(cnext));
+ 			}
+ 		}
+ 		return toReturn;
      }
 
  	// For debugging

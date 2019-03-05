@@ -24,11 +24,11 @@ public class DocumentBenchmarking {
 		
 	    // The amount of characters to increment each step
 	    // You can play around with this
-		int increment = 20000;
+		int increment = 80000;
 
 		// The number of steps to run.  
 		// You can play around with this.
-		int numSteps = 20;
+		int numSteps = 30;
 		
 		// THe number of characters to start with. 
 		// You can play around with this.
@@ -43,8 +43,24 @@ public class DocumentBenchmarking {
 			// numToCheck holds the number of characters that you should read from the 
 			// file to create both a BasicDocument and an EfficientDocument.  
 			
+			System.out.print(numToCheck+"\t");
+			String text = getStringFromFile(textfile,numToCheck);
+			long starttime = System.nanoTime();
+			Document bdoc = new BasicDocument(text);
+			bdoc.getFleschScore();
+			long endtime = System.nanoTime();
+			double runtime = (endtime - starttime) /1000000000.0;
+			System.out.print(runtime+"\t");
+			
+			starttime = System.nanoTime();
+			Document edoc = new EfficientDocument(text);
+			edoc.getFleschScore();
+			endtime = System.nanoTime();
+			runtime = (endtime - starttime) /1000000000.0;
+			System.out.println(runtime);
 			/* Each time through this loop you should:
 			 * 1. Print out numToCheck followed by a tab (\t) (NOT a newline)
+			
 			 * 2. Read numToCheck characters from the file into a String
 			 *     Hint: use the helper method below.
 			 * 3. Time a loop that runs trials times (trials is the variable above) that:
